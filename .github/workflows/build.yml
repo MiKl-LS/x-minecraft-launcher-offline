@@ -36,6 +36,11 @@ jobs:
           cache: "pnpm"
       - name: Install
         run: pnpm install
+      - name: Apply offline accounts patch
+        run: |
+          if [ -f "allow-offline-accounts.patch" ]; then
+            git apply allow-offline-accounts.patch
+          fi
       - name: Setup Linux
         if: ${{ runner.os == 'Linux' }}
         run: |
