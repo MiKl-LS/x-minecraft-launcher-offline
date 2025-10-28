@@ -1,0 +1,36 @@
+diff --git a/xmcl-keystone-ui/src/composables/login.ts b/xmcl-keystone-ui/src/composables/login.ts
+index d06d0ce1..df8c4946 100644
+--- a/xmcl-keystone-ui/src/composables/login.ts
++++ b/xmcl-keystone-ui/src/composables/login.ts
+@@ -80,7 +80,8 @@ export function useAuthorityItems(authorities: Ref<AuthorityMetadata[] | undefin
+     if (!authorities.value) return []
+     const result = [] as AuthorityItem[]
+     for (const v of authorities.value) {
+-      if (!thirdParty.value && v.authority !== AUTHORITY_MICROSOFT) continue
++      // Allow offline accounts to be visible regardless of third-party setting
++      if (!thirdParty.value && v.authority !== AUTHORITY_MICROSOFT && v.authority !== AUTHORITY_DEV) continue
+       if (v.authority === AUTHORITY_MICROSOFT) {
+         result.push({
+           value: AUTHORITY_MICROSOFT,
+           text: t('userServices.microsoft.name'),
+           icon: 'gavel',
+         })
+       }
+       if (v.authority === AUTHORITY_DEV) {
+         result.push({
+           value: AUTHORITY_DEV,
+           text: t('userServices.offline.name'),
+           icon: 'wifi_off',
+         })
+       }
+       result.push({
+         value: v.authority,
+         text: v.authlibInjector?.meta.serverName ?? new URL(v.authority).host,
+         icon: v.favicon ?? '',
+       })
+     }
+     return result
+   })
+
+   return items
+ }
